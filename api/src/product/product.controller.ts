@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createproduct.dto';
 import { UpdateUserDto } from './dto/editUser.dto';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
 
 @Controller('product')
 export class ProductController {
@@ -21,6 +22,7 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
+  @UseGuards(JwtGuard)
   @Patch('/:id')
   editById(@Param('id') id:string, @Body() updateUserDto: UpdateUserDto){
     return this.productService.editById(id, updateUserDto.name, updateUserDto.price, updateUserDto.description);
